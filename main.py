@@ -16,12 +16,12 @@ if __name__ == "__main__":
     files = os.listdir(path)
 
     #new filename prefix
-    newprefix = "NEW_FILENAME"
+    newprefix = "NEW_FILENAME_"
     last_number = 0
 
     #get missing numbers in filenames that start with newprefix
     missingnumbers = list()
-    all_numbers_fromfile = [int(ai_file.split(".")[0].split("_")[-1]) for ai_file in files if ai_file.startswith(newprefix)]
+    all_numbers_fromfile = [int(nf_file.split(".")[0].split("_")[-1]) for nf_file in files if nf_file.startswith(newprefix)]
     if all_numbers_fromfile:
         first_number = all_numbers_fromfile[0]
         last_number = all_numbers_fromfile[-1]
@@ -29,27 +29,27 @@ if __name__ == "__main__":
         missingnumbers = (number for number in range(first_number, last_number + 1) if number not in all_numbers_fromfile)
 
     #get all files without newprefix
-    notaifiles = (notai_file for notai_file in files if not notai_file.startswith(newprefix))
+    notnffiles = (notnf_file for notnf_file in files if not notnf_file.startswith(newprefix))
 
     #if there are files with newprefix but missing numbers: rename files without newprefix
     for number in missingnumbers:
-        for notai_file in notaifiles:
-            file_suffix = os.path.splitext(notai_file)[1]
+        for notnf_file in notnffiles:
+            file_suffix = os.path.splitext(notnf_file)[1]
 
-            old_file_name = path + f"\\{notai_file}"
-            new_file_name = path + (f"\\{newprefix}" + f"{number}".zfill(4) + file_suffix) #AI_IMAGE_0001 ...
+            old_file_name = path + f"\\{notnf_file}"
+            new_file_name = path + (f"\\{newprefix}" + f"{number}".zfill(4) + file_suffix)
 
             if not os.path.isfile(new_file_name):
                 os.rename(old_file_name, new_file_name)
             break
 
     #rename all missing files without newprefix
-    for notai_file in notaifiles:
+    for notnf_file in notnffiles:
         last_number += 1
-        file_suffix = os.path.splitext(notai_file)[1]
+        file_suffix = os.path.splitext(notnf_file)[1]
 
-        old_file_name = path + f"\\{notai_file}"
-        new_file_name = path + (f"\\{newprefix}" + f"{last_number}".zfill(4) + file_suffix) #AI_IMAGE_0001 ...
+        old_file_name = path + f"\\{notnf_file}"
+        new_file_name = path + (f"\\{newprefix}" + f"{last_number}".zfill(4) + file_suffix)
 
         if not os.path.isfile(new_file_name):
             os.rename(old_file_name, new_file_name)
